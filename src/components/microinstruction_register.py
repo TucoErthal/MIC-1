@@ -1,13 +1,11 @@
+import components
+
 #                    TESTE NA MÃO
 #                    0b 0000 0000 0000 0000 barB barA ADDR-----
 #                    0b 0000 0000 0000 0000 10   5    128  7
 #                    0b 0000 0000 0000 0000 1010 0101 1000 0111
 
-def bitmask(value, offset, width,):
-    mask = (1 << width) - 1
-    return (value >> offset) & mask
-
-class microinstruction_register:
+class MicroinstructionRegister(components.Register):
     def __init__(self):
         self.original_value = 0
     
@@ -62,8 +60,11 @@ class microinstruction_register:
     @property
     def AMux(self):
         return bitmask(self.original_value, 31, 1)
-
-obj = microinstruction_register()
+    
+    
+"""
+# ================ TESTS ====================
+obj = MicroinstructionRegister()
 obj.original_value = 0b00000000000000001010010110000111
 print(f"Original Value: {obj.original_value}")
 print(f"addr: {obj.addr: 08b}")
@@ -71,4 +72,4 @@ print(f"barr_A: {obj.barr_A: 04b}")
 print(f"barr_B: {obj.barr_B: 04b}")
 print(f"barr_C: {obj.barr_C: 04b}")
 
-print(f"original: {0b110010}, masked = {bitmask(0b110010, 5, 1)}")
+print(f"original: {0b110010}, masked = {bitmask(0b110010, 5, 1)}") """
