@@ -1,79 +1,94 @@
 from .bit_types import *
 
-#                    TESTE NA MÃO
-#                    0b 0000 0000 0000 0000 barB barA ADDR-----
-#                    0b 0000 0000 0000 0000 10   5    128  7
-#                    0b 0000 0000 0000 0000 1010 0101 1000 0111
-
 def bit_slice(value : int, offset : int, width : int,):
     mask = (1 << width) - 1
     return (value >> offset) & mask
 
 class MicroinstructionRegister():
     def __init__(self):
-        self.microinstruction : UInt32 = UInt32(0)
+        self.input : UInt32 = UInt32(0)
     
     @property
-    def addr(self):
-        return bit_slice(self.microinstruction.value, 0, 8)
+    def addr(self)-> UInt8:
+        return UInt8(bit_slice(self.input.value, 0, 8))
     
     @property
-    def bus_A(self):
-        return bit_slice(self.microinstruction.value, 8, 4)
+    def bus_A(self) -> UInt4:
+        return UInt4(bit_slice(self.input.value, 8, 4))
     
     @property
-    def bus_B(self):
-        return bit_slice(self.microinstruction.value, 12, 4)
+    def bus_B(self) -> UInt4:
+        return UInt4(bit_slice(self.input.value, 12, 4))
     
     @property
-    def bus_C(self):
-        return bit_slice(self.microinstruction.value, 16, 4)
+    def bus_C(self) -> UInt4:
+        return UInt4(bit_slice(self.input.value, 16, 4))
     
     @property
-    def en_C(self):
-        return bit_slice(self.microinstruction.value, 20, 1)
+    def encode_C(self) -> UInt1:
+        return UInt1(bit_slice(self.input.value, 20, 1))
         
     @property
-    def WR(self):
-        return bit_slice(self.microinstruction.value, 21, 1)
+    def wr(self) -> UInt1:
+        return UInt1(bit_slice(self.input.value, 21, 1))
     
     @property
-    def RD(self):
-        return bit_slice(self.microinstruction.value, 22, 1)
+    def rd(self) -> UInt1:
+        return UInt1(bit_slice(self.input.value, 22, 1))
     
     @property
-    def MAR(self):
-        return bit_slice(self.microinstruction.value, 23, 1)
+    def mar(self) -> UInt1:
+        return UInt1(bit_slice(self.input.value, 23, 1))
     
     @property
-    def MBR(self):
-        return bit_slice(self.microinstruction.value, 24, 1)
+    def mbr(self) -> UInt1:
+        return UInt1(bit_slice(self.input.value, 24, 1))
     
     @property
-    def DESL(self):
-        return bit_slice(self.microinstruction.value, 25, 2)
+    def shift(self)-> UInt2:
+        return UInt2(bit_slice(self.input.value, 25, 2))
     
     @property
-    def ULA(self):
-        return bit_slice(self.microinstruction.value, 27, 2)
+    def alu(self)-> UInt2:
+        return UInt2(bit_slice(self.input.value, 27, 2))
     
     @property
-    def COND(self):
-        return bit_slice(self.microinstruction.value, 29, 2)
+    def cond(self) -> UInt2:
+        """
+        cond = 00: no branch
+        cond = 01: branch if NEG
+        cond = 10: branch if ZERO
+        cond = 11: branch
+        """
+        return UInt2(bit_slice(self.input.value, 29, 2))
     
     @property
-    def AMux(self):
-        return bit_slice(self.microinstruction.value, 31, 1)
+    def amux(self) -> UInt1:
+        """
+        amux = 0: A latch
+        amux = 1: MBR
+        """
+        return UInt1(bit_slice(self.input.value, 31, 1))
     
-    
-"""
-# ================ TESTS ====================
-obj = MicroinstructionRegister()
-obj.original_value = 0b00000000000000001010010110000111
-print(f"Original Value: {obj.original_value}")
-print(f"addr: {obj.addr: 08b}")
-print(f"barr_A: {obj.barr_A: 04b}")
-print(f"barr_B: {obj.barr_B: 04b}")
-print(f"barr_C: {obj.barr_C: 04b}")
+    def debug(self):
+        print("=====================")
+        print(f"\nBYTE 0 = {bit_slice(self.input.value, 0, 8):08b}")
+        print(f"\t(1) amux: {self.amux.value}")
+        print(f"\t(2) cond: {self.cond.value}")
+        print(f"\t(2) alu: {self.alu.value}")
+        print(f"\t(2) shift: {self.shift.value}")
+        print(f"\t(1) mbr: {self.mbr.value}")
 
-print(f"original: {0b110010}, masked = {bitmask(0b110010, 5, 1)}") """
+        print(f"\nBYTE 1 = {bit_slice(self.input.value, 9, 8):08b}")
+        print(f"\t(1) mar: {self.mar.value}")
+        print(f"\t(1) rd: {self.rd.value}")
+        print(f"\t(1) wr: {self.wr.value}")
+        print(f"\t(1) encode_C: {self.encode_C.value}")
+        print(f"\t(4) bus_C: {self.bus_C.value}")
+
+        print(f"\nBYTE 2 = {bit_slice(self.input.value, 15, 8):08b}")
+        print(f"\t(4) bus_B: {self.bus_B.value}")
+        print(f"\t(4) bus_A: {self.bus_A.value}")
+
+        print(f"\nBYTE 3 = {bit_slice(self.input.value, 25, 8):08b}")
+        print(f"\t(8) addr: {self.addr.value}")
