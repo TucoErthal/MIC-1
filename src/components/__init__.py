@@ -3,5 +3,5 @@ from .bit_types import *
 from .control_store import *
 from .decoder import *
 from .microinstruction_register import *
-from .register_file import *
+from .scratchpad import *
 from .register import *

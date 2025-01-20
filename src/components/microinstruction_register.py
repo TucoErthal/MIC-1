@@ -1,12 +1,14 @@
 from .bit_types import *
+from .register import *
 
 def bit_slice(value : int, offset : int, width : int,):
     mask = (1 << width) - 1
     return (value >> offset) & mask
 
-class MicroinstructionRegister():
+class MicroinstructionRegister(Register32):
     def __init__(self):
-        self.input : UInt32 = UInt32(0)
+        super().__init__(UInt32(0))
+        self.write = UInt1(1)
     
     @property
     def addr(self)-> UInt8:

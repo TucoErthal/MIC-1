@@ -3,6 +3,8 @@ from components import *
 
 # ================================ DATAPATH ================================
 
+latch_A = Register16()
+latch_B = Register16()
 alu = ArithmeticLogicUnit()
 
 # ================================ CONTROL UNIT ================================
@@ -17,7 +19,7 @@ mir.debug()
 # ================================ CLOCK ================================
 
 def subcycle1():
-    pass
+    mir.update()
 
 def subcycle2():
     pass
@@ -34,7 +36,7 @@ def cycle():
     subcycle3()
     subcycle4()
 
-register_file : RegisterFile
+scratchpad : Scratchpad
 
 decoder_A = Decoder4to16()
 decoder_A.input = mir.bus_A

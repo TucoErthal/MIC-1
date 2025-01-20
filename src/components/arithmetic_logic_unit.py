@@ -13,7 +13,7 @@ class ArithmeticLogicUnit:
         self.B : Int16 = Int16(0)
 
     @property
-    def result(self) -> Int16:
+    def output(self) -> Int16:
         match(self.opcode.value):
             case 0b00: # ADD
                 return Int16(self.A.value + self.B.value)

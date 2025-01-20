@@ -1,7 +1,7 @@
 from .bit_types import *
 from .register import *
 
-class RegisterFile:
+class Scratchpad:
     def __init__(self):
         self.write : UInt1 = UInt1(0)
 

@@ -9,6 +9,7 @@ class Decoder4to16:
         return UInt16(1 << (self.input.value))
     
 """ 
+# TEST
 dec = Decoder4to16()
 for i in range(16):
     dec.input = UInt4(i)
