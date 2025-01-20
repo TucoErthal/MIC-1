@@ -3,6 +3,8 @@ from components import *
 
 # ================================ DATAPATH ================================
 
+memory = Memory()
+
 latch_A = Register16()
 latch_B = Register16()
 alu = ArithmeticLogicUnit()
@@ -22,7 +24,8 @@ def subcycle1():
     mir.update()
 
 def subcycle2():
-    pass
+    latch_A.update()
+    latch_B.update()
 
 def subcycle3():
     pass
