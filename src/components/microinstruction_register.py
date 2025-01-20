@@ -1,10 +1,6 @@
 from .bit_types import *
 from .register import *
 
-def bit_slice(value : int, offset : int, width : int,):
-    mask = (1 << width) - 1
-    return (value >> offset) & mask
-
 class MicroinstructionRegister(Register32):
     def __init__(self):
         super().__init__(UInt32(0))

@@ -18,13 +18,13 @@ class ArithmeticLogicUnit:
             case 0b00: # ADD
                 return Int16(self.A.value + self.B.value)
             
-            case 0b00: # AND
+            case 0b01: # AND
                 return Int16(self.A.value & self.B.value)
             
-            case 0b00: # PASS
+            case 0b10: # PASS
                 return Int16(self.A.value)
             
-            case 0b00: # NOT
+            case 0b11: # NOT
                 return Int16(~ self.A.value)
             
             case _:    # IMPOSSIBLE

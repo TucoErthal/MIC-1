@@ -1,3 +1,7 @@
+def bit_slice(value : int, offset : int, width : int,):
+    mask = (1 << width) - 1
+    return (value >> offset) & mask
+
 class UInt1:
     def __init__(self, value: int, override : bool = False):
         if(0 <= value <= 1):
@@ -105,8 +109,8 @@ class Int32:
         else:
             raise ValueError(f"{value} out of range for Int32")
         
-# =========== TESTS =================
+""" # =========== TESTS =================
 a = UInt8(10)
 b = a
 a.set(255)
-print(b.value)
+print(b.value) """
