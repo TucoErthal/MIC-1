@@ -5,5 +5,7 @@ from .decoder import *
 from .latch import *
 from .memory import *
 from .microinstruction_register import *
-from .scratchpad import *
+from .multiplexer import *
 from .register import *
+from .register_file import *
+from .shifter import *

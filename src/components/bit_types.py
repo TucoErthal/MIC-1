@@ -55,6 +55,19 @@ class UInt8:
         else:
             raise ValueError(f"{value} out of range for UInt8")
         
+class UInt12:
+    def __init__(self, value: int, override : bool = False):
+        if(0 <= value <= (1 << 12) - 1):
+            self.value = value
+        elif(override == False):
+            raise ValueError(f"{value} out of range for UInt12")
+
+    def set(self, value : int):
+        if(0 <= value <= (1 << 12) - 1):
+            self.value = value
+        else:
+            raise ValueError(f"{value} out of range for UInt12")
+        
 class UInt16:
     def __init__(self, value: int, override : bool = False):
         if(0 <= value <= (1 << 16) - 1):
@@ -82,6 +95,19 @@ class UInt32:
             raise ValueError(f"{value} out of range for UInt32")
         
 # ================= INT ================
+
+class Int12:
+    def __init__(self, value: int, override : bool = False):
+        if(-(1 << 11) <= value <= (1 << 11) - 1):
+            self.value = value
+        elif(override == False):
+            raise ValueError(f"{value} out of range for Int12")
+
+    def set(self, value : int):
+        if(-(1 << 11) <= value <= (1 << 11) - 1):
+            self.value = value
+        else:
+            raise ValueError(f"{value} out of range for Int12")
 
 class Int16:
     def __init__(self, value: int, override : bool = False):

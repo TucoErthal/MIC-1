@@ -1,5 +1,4 @@
-from bit_types import *
-from bitstring import BitArray
+from .bit_types import *
 
 class Shifter():
     """
@@ -8,21 +7,33 @@ class Shifter():
     """
     def __init__(self):
         self.opcode : UInt2 = UInt2(0)
-        self.input : Int16 = Int16(0)
+        self.input : Int16 | UInt16 = Int16(0)
 
     @property
-    def output(self) -> Int16:
+    def output(self) -> Int16 | UInt16:
         match(self.opcode.value):
             case 0b00: # NO SHIFT
                 return Int16(self.input.value)
             
             case 0b01: # RIGHT SHIFT
-                return Int16(self.input.value >> 1)
+                if(type(self.input) is UInt16):
+                    return Int16(self.input.value << 1)
+                
+                elif(type(self.input) is Int16):
+                    raise ValueError()
+                
+                else:
+                    raise ValueError()
             
             case 0b10:  # LEFT SHIFT
-                return BitArray(bin='1111111111111010').
-            
-            ba2int((int2ba(value, length=16, signed=True) << 1)[-16:], signed=True)
+                if(type(self.input) is UInt16):
+                    return Int16(self.input.value << 1)
+                
+                elif(type(self.input) is Int16):
+                    raise ValueError()
+                
+                else:
+                    raise ValueError()
                 
             case 0b11: # NOT USED
                 raise ValueError("shifter opcode 3 does not exist")
