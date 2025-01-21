@@ -8,7 +8,7 @@ class ArithmeticLogicUnit:
     F = 11: R = INV(A)
     """
     def __init__(self):
-        self.opcode : UInt4 = UInt4(0)
+        self.opcode : Bit2 = Bit2(0)
         self.input_A : Int16 | UInt16 = Int16(0)
         self.input_B : Int16 | UInt16 = Int16(0)
 
@@ -31,9 +31,9 @@ class ArithmeticLogicUnit:
                 raise ValueError("huh?")
             
     @property
-    def zero_flag(self) -> UInt1:
-        return UInt1(1) if self.input_A.value + self.input_B.value == 0 else UInt1(0)
+    def zero_flag(self) -> Bit1:
+        return Bit1(1) if self.input_A.value + self.input_B.value == 0 else Bit1(0)
     
     @property
     def negative_flag(self):
-        return UInt1(1) if self.input_A.value + self.input_B.value < 0 else UInt1(0)
+        return Bit1(1) if self.input_A.value + self.input_B.value < 0 else Bit1(0)

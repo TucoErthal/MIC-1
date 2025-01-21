@@ -29,18 +29,46 @@ scratchpad.input = sh.output            #SHIFTER TO SCRATCHPAD
 
 # ================================ CONTROL UNIT ================================
 
+decoder_A = Decoder4to16()
+decoder_B = Decoder4to16()
+mmux = Multiplexer8by2()
+inc = Incrementer()
+mpc = Register8()
 cs : ControlStore = ControlStore()
-cs.mpc = UInt8(1)
-
 mir = MicroinstructionRegister()
+ms = MicroSequencer()
+
+# =================== BUSES
+
+decoder_A.input = mir.bus_A
+decoder_B.input = mir.bus_B
+# DECODER C
+mmux.input_A = inc.output
+mmux.input_B = mir.addr
+mmux.select = ms.output
+inc.input = mpc.output
+mpc.input = mmux.output
+cs.mpc = mpc.output
 mir.input = cs.output
+ms.input_cond = mir.cond
+ms.input_negative_flag = alu.negative_flag
+ms.input_zero_flag = alu.zero_flag
+
+# to datapath
+#scratchpad.addr_A = decoder_A.output
+scratchpad.addr_B
+scratchpad.addr_C
+amux.select = mir.amux
+alu.opcode = mir.alu
+sh.opcode = mir.shift
+
+
+
+
 mir.debug()
 
-
-decoder_A = Decoder4to16()
 decoder_A.input = mir.bus_A
 
-decoder_B = Decoder4to16()
 decoder_B.input = mir.bus_B
 
 # ================================ CLOCK ================================
@@ -109,6 +137,13 @@ with ui.column():
 
         with ui.button(icon = "play_arrow"):
             ui.tooltip("Stop execution")#.classes('bg-green')
-   
-    
+
+scratchpad_table = ui.table(
+    columns = [
+        {'name': 'register', 'label': 'Register', 'field': 'register', 'align': 'left', 'sortable': False},
+        {'name': 'value', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False},
+    ],
+    rows = [{'register': name, 'value': register.output.value} for name, register in scratchpad.registers.items()]
+)
+
 ui.run(port=8080)

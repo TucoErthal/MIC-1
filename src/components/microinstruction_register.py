@@ -4,7 +4,7 @@ from .register import *
 class MicroinstructionRegister(Register32):
     def __init__(self):
         super().__init__(UInt32(0))
-        self.write = UInt1(1)
+        self.write = Bit1(1)
     
     @property
     def addr(self)-> UInt8:
@@ -23,50 +23,50 @@ class MicroinstructionRegister(Register32):
         return UInt4(bit_slice(self.input.value, 16, 4))
     
     @property
-    def encode_C(self) -> UInt1:
-        return UInt1(bit_slice(self.input.value, 20, 1))
+    def encode_C(self) -> Bit1:
+        return Bit1(bit_slice(self.input.value, 20, 1))
         
     @property
-    def wr(self) -> UInt1:
-        return UInt1(bit_slice(self.input.value, 21, 1))
+    def wr(self) -> Bit1:
+        return Bit1(bit_slice(self.input.value, 21, 1))
     
     @property
-    def rd(self) -> UInt1:
-        return UInt1(bit_slice(self.input.value, 22, 1))
+    def rd(self) -> Bit1:
+        return Bit1(bit_slice(self.input.value, 22, 1))
     
     @property
-    def mar(self) -> UInt1:
-        return UInt1(bit_slice(self.input.value, 23, 1))
+    def mar(self) -> Bit1:
+        return Bit1(bit_slice(self.input.value, 23, 1))
     
     @property
-    def mbr(self) -> UInt1:
-        return UInt1(bit_slice(self.input.value, 24, 1))
+    def mbr(self) -> Bit1:
+        return Bit1(bit_slice(self.input.value, 24, 1))
     
     @property
-    def shift(self)-> UInt2:
-        return UInt2(bit_slice(self.input.value, 25, 2))
+    def shift(self)-> Bit2:
+        return Bit2(bit_slice(self.input.value, 25, 2))
     
     @property
-    def alu(self)-> UInt2:
-        return UInt2(bit_slice(self.input.value, 27, 2))
+    def alu(self)-> Bit2:
+        return Bit2(bit_slice(self.input.value, 27, 2))
     
     @property
-    def cond(self) -> UInt2:
+    def cond(self) -> Bit2:
         """
         cond = 00: no branch
         cond = 01: branch if NEG
         cond = 10: branch if ZERO
         cond = 11: branch
         """
-        return UInt2(bit_slice(self.input.value, 29, 2))
+        return Bit2(bit_slice(self.input.value, 29, 2))
     
     @property
-    def amux(self) -> UInt1:
+    def amux(self) -> Bit1:
         """
         amux = 0: A latch
         amux = 1: MBR
         """
-        return UInt1(bit_slice(self.input.value, 31, 1))
+        return Bit1(bit_slice(self.input.value, 31, 1))
     
     def debug(self):
         print("=====================")

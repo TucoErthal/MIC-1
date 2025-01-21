@@ -6,7 +6,7 @@ class Shifter():
     amux = 1: MBR
     """
     def __init__(self):
-        self.opcode : UInt2 = UInt2(0)
+        self.opcode : Bit2 = Bit2(0)
         self.input : Int16 | UInt16 = Int16(0)
 
     @property
