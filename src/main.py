@@ -50,29 +50,20 @@ class Clock:
         self.current_cycle = 1
         self.current_subcycle = 1
 
-clock = Clock()
-
 def subcycle1():
     mir.update()
-
     ui.notify("subcycle 1")
 
 def subcycle2():
     latch_A.update()
     latch_B.update()
-
     ui.notify("subcycle 2")
 
 def subcycle3():
-
     ui.notify("subcycle 3")
 
-
 def subcycle4():
-
     ui.notify("subcycle 4")
-
-
 
 def step_subcycle():
     match(clock.current_subcycle):
@@ -97,14 +88,17 @@ def step_cycle():
     subcycle4()
     clock.current_cycle += 1
 
+clock = Clock()
+
 # ====================== USER INTERFACE ======================
 
 def throw_error(message: str):
     ui.notify(message, color="red")
 
-with ui.row():
-
-    ui.toggle({1: '1', 2: '2', 3: '3', 4: '4'}).bind_value_from(clock, 'current_subcycle')
+with ui.column():
+    with ui.row():
+        ui.label().bind_text_from(clock, "current_cycle")
+        ui.toggle({1: '1', 2: '2', 3: '3', 4: '4'}).bind_value_from(clock, "current_subcycle")
 
     with ui.button_group():
         with ui.button(icon = "play_arrow", on_click = step_subcycle):
@@ -115,5 +109,6 @@ with ui.row():
 
         with ui.button(icon = "play_arrow"):
             ui.tooltip("Stop execution")#.classes('bg-green')
+   
     
 ui.run(port=8080)
