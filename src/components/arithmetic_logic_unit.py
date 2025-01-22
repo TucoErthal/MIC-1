@@ -16,16 +16,24 @@ class ArithmeticLogicUnit:
     def output(self) -> Bit16:
         match(self.opcode.unsigned):
             case 0b00: # ADD
-                return Bit16((self.input_A.unsigned + self.input_B.unsigned) % (1 << 16))
+                _output = Bit16((self.input_A.unsigned + self.input_B.unsigned) % (1 << 16))
+                if VERBOSE_DEBUG: print(f"\talu.add({self.input_A.unsigned}, {self.input_B.unsigned}) = {_output.unsigned}")
+                return _output
             
             case 0b01: # AND
-                return Bit16(self.input_A.unsigned & self.input_B.unsigned)
+                _output = Bit16(self.input_A.unsigned & self.input_B.unsigned)
+                if VERBOSE_DEBUG: print(f"\talu.and({self.input_A.unsigned}, {self.input_B.unsigned}) = {_output.unsigned}")
+                return _output
             
             case 0b10: # PASS
-                return Bit16(self.input_A.unsigned)
+                _output = Bit16(self.input_A.unsigned)
+                if VERBOSE_DEBUG: print(f"\talu.pass({self.input_A.unsigned}) = {_output.unsigned}")
+                return _output
             
             case 0b11: # NOT
-                return Bit16(~ self.input_A.unsigned)
+                _output = Bit16(~ self.input_A.unsigned)
+                if VERBOSE_DEBUG: print(f"\talu.not({self.input_A.unsigned}) = {_output.unsigned}")
+                return _output
             
             case _:    # IMPOSSIBLE
                 raise ValueError("huh?")
@@ -37,3 +45,14 @@ class ArithmeticLogicUnit:
     @property
     def negative_flag(self):
         return Bit1(1) if self.input_A.unsigned + self.input_B.unsigned < 0 else Bit1(0)
+    
+def test():
+    print("TEST 1: arithmetic logic unit")
+    alu1 = ArithmeticLogicUnit()
+    alu1.input_A = Bit16(8)
+    alu1.input_B = Bit16(90)
+
+    alu2 = ArithmeticLogicUnit()
+    alu2.input_A = alu1.output
+    alu2.input_B = Bit16(5)
+    alu2.output

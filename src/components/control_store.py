@@ -13,4 +13,13 @@ class ControlStore:
 
     @property
     def output(self) -> Bit32:
-        return self.microprogram[self.mpc.unsigned]
+        _output = self.microprogram[self.mpc.unsigned]
+        if VERBOSE_DEBUG: print(f"\tcs({self.mpc.unsigned}) = {_output.unsigned:08x}")
+        return _output
+    
+    
+def test():
+    print("TEST 2: control_store")
+    cs = ControlStore()
+    cs.microprogram = [Bit32(0xfeedbeef)]
+    cs.output

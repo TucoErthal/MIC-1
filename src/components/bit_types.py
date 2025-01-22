@@ -1,3 +1,5 @@
+VERBOSE_DEBUG = True
+
 def bit_slice(value : int, offset : int, width : int,):
     mask = (1 << width) - 1
     return (value >> offset) & mask

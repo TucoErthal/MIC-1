@@ -1,4 +1,3 @@
-from nicegui import ui
 from components import *
 
 # ================================ DATAPATH ================================
@@ -85,21 +84,11 @@ def subcycle1():
     mir.update()
 
 def subcycle2():    
-    """ print("scratchpad.addr_B", scratchpad.addr_B.unsigned)
-    print("scratchpad.output_B", scratchpad.output_B.unsigned)
-    print("latch_B.input", latch_B.input.unsigned)
-    print("latch_B.output", latch_B.output.unsigned) """
     latch_B.update()
-    print("latch_B.output", latch_B.output.unsigned)
-
-    """  print("scratchpad.addr_B", scratchpad.addr_B.unsigned)
-    print("scratchpad.output_B", scratchpad.output_B.unsigned)
-    print("latch_B.input", latch_B.input.unsigned)
-    print("latch_B.output", latch_B.output.unsigned) """
-    print("latch_B.output", latch_B.output.unsigned)
-
+    
 def subcycle3():
     # MBR MAR
+    pass
 
 def subcycle4():    
     scratchpad.update()
@@ -129,3 +118,7 @@ def step_cycle():
     clock.current_cycle += 1
 
 clock = Clock()
+
+# ++++++++++++++++++++++++++++++++++++++++++++++==
+
+step_cycle()
