@@ -6,8 +6,12 @@ from components import *
 mem = Memory()
 
 scratchpad : RegisterFile = RegisterFile()
-latch_A = Latch16()
-latch_B = Latch16()
+
+latch_A = Register16()
+latch_A.write = Bit1(1)
+latch_B = Register16()
+latch_B.write = Bit1(1)
+
 mar = Register16() #MAR(12 bits)
 mbr = Register16() #MBR(12 bits)
 amux = Multiplexer16by2() #AMUX
@@ -122,9 +126,20 @@ def subcycle1():
     update_mir_table()
     ui.notify("subcycle 1")
 
-def subcycle2():
-    latch_B.input = scratchpad.output_B
-    latch_B.update()    
+def subcycle2():    
+    """ print("scratchpad.addr_B", scratchpad.addr_B.unsigned)
+    print("scratchpad.output_B", scratchpad.output_B.unsigned)
+    print("latch_B.input", latch_B.input.unsigned)
+    print("latch_B.output", latch_B.output.unsigned) """
+    latch_B.update()
+    print("latch_B.output", latch_B.output.unsigned)
+
+    """  print("scratchpad.addr_B", scratchpad.addr_B.unsigned)
+    print("scratchpad.output_B", scratchpad.output_B.unsigned)
+    print("latch_B.input", latch_B.input.unsigned)
+    print("latch_B.output", latch_B.output.unsigned) """
+    print("latch_B.output", latch_B.output.unsigned)
+
     ui.notify("subcycle 2")
 
 def subcycle3():

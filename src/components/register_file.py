@@ -66,7 +66,7 @@ class RegisterFile:
     @property
     def output_B(self) -> Bit16:
         keys = list(self.registers.keys())
-        return self.registers[keys[self.addr_B.unsigned]].output
+        return Bit16(self.registers[keys[self.addr_B.unsigned]].output.unsigned)
 
     def update(self):
         keys = list(self.registers.keys())
