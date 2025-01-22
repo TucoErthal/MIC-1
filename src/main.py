@@ -3,7 +3,7 @@ from components import *
 
 # ================================ DATAPATH ================================
 
-memory = Memory()
+mem = Memory()
 
 scratchpad : RegisterFile = RegisterFile()
 latch_A = Register16()
@@ -143,7 +143,27 @@ scratchpad_table = ui.table(
         {'name': 'register', 'label': 'Register', 'field': 'register', 'align': 'left', 'sortable': False},
         {'name': 'value', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False},
     ],
-    rows = [{'register': name, 'value': register.output._value} for name, register in scratchpad.registers.items()]
+    rows = [{'register': name, 'value': register.output.signed} for name, register in scratchpad.registers.items()]
+)
+
+scratchpad_table = ui.table(
+    title = "MIR",
+    columns = [
+        {'name': 'AMUX', 'label': 'Register', 'field': 'register', 'align': 'left', 'sortable': False},
+        {'name': 'COND', 'label': 'Register', 'field': 'register', 'align': 'left', 'sortable': False},
+        {'name': 'ALU', 'label': 'Register', 'field': 'register', 'align': 'left', 'sortable': False},
+        {'name': 'SHIFT', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False},
+        {'name': 'MBR', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False},
+        {'name': 'MAR', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False},
+        {'name': 'RD', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False},
+        {'name': 'WR', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False},
+        {'name': 'ENC_C', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False},
+        {'name': 'C', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False},
+        {'name': 'B', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False},
+        {'name': 'A', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False},
+        {'name': 'ADDR', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False}
+    ],
+    rows = [{'register': name, 'value': register.output.signed} for name, register in scratchpad.registers.items()]
 )
 
 ui.run(port=8080)

@@ -6,4 +6,4 @@ class Incrementer():
 
     @property
     def output(self):
-        return Bit8(self.input._value + 1) # NAO ESTÁ DANDO OVERFLOW
+        return Bit8(self.input.unsigned + 1) # NAO ESTÁ DANDO OVERFLOW

@@ -10,4 +10,4 @@ class ControlStore:
 
     @property
     def output(self) -> Bit32:
-        return self.microprogram[self.mpc._value]
+        return self.microprogram[self.mpc.unsigned]

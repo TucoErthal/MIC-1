@@ -3,7 +3,7 @@ from .register import *
 
 class RegisterFile:
     def __init__(self):
-        self.input : Bit16 | Bit16 = Bit16(0)
+        self.input : Bit16 = Bit16(0)
         self.addr_A : Bit4 = Bit4(0)
         self.addr_B : Bit4 = Bit4(0)
         self.addr_C : Bit4 = Bit4(0)
@@ -40,12 +40,12 @@ class RegisterFile:
             register.write = Bit1(1) # VEJA EXPLICAÇÃO ABAIXO
     
     @property
-    def output_A(self) -> Bit16 | Bit16:
+    def output_A(self) -> Bit16:
         keys = list(self.registers.keys())
         return self.registers[keys[self.addr_A.unsigned]].output
     
     @property
-    def output_B(self) -> Bit16 | Bit16:
+    def output_B(self) -> Bit16:
         keys = list(self.registers.keys())
         return self.registers[keys[self.addr_B.unsigned]].output
 
