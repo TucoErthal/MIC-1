@@ -143,7 +143,7 @@ scratchpad_table = ui.table(
         {'name': 'register', 'label': 'Register', 'field': 'register', 'align': 'left', 'sortable': False},
         {'name': 'value', 'label': 'Value', 'field': 'value', 'align': 'left', 'sortable': False},
     ],
-    rows = [{'register': name, 'value': register.output.value} for name, register in scratchpad.registers.items()]
+    rows = [{'register': name, 'value': register.output._value} for name, register in scratchpad.registers.items()]
 )
 
 ui.run(port=8080)

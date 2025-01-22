@@ -3,10 +3,10 @@ from .register import *
 
 class RegisterFile:
     def __init__(self):
-        self.input : Int16 | UInt16 = Int16(0)
-        self.addr_A : UInt4 = UInt4(0)
-        self.addr_B : UInt4 = UInt4(0)
-        self.addr_C : UInt4 = UInt4(0)
+        self.input : Bit16 | Bit16 = Bit16(0)
+        self.addr_A : Bit4 = Bit4(0)
+        self.addr_B : Bit4 = Bit4(0)
+        self.addr_C : Bit4 = Bit4(0)
 
         """
         C — selects register for storing into if ENC = 1: 0 = PC, 1 = AC, etc.
@@ -21,9 +21,9 @@ class RegisterFile:
             "sp":           Register16(),                               
             "ir":           Register16(),                               
             "tir":          Register16(),                               
-            "zero":         Register16(Int16(1), readonly = True),      
-            "plus_one":     Register16(Int16(1), readonly = True),      
-            "minus_one":    Register16(Int16(1), readonly = True),      
+            "zero":         Register16(Bit16(1), readonly = True),      
+            "plus_one":     Register16(Bit16(1), readonly = True),      
+            "minus_one":    Register16(Bit16(1), readonly = True),      
             "amask":        Register16(),                               
             "smask":        Register16(),                               
             "a":            Register16(),                               
@@ -40,18 +40,18 @@ class RegisterFile:
             register.write = Bit1(1) # VEJA EXPLICAÇÃO ABAIXO
     
     @property
-    def output_A(self) -> Int16 | UInt16:
+    def output_A(self) -> Bit16 | Bit16:
         keys = list(self.registers.keys())
-        return self.registers[keys[self.addr_A.value]].output
+        return self.registers[keys[self.addr_A.unsigned]].output
     
     @property
-    def output_B(self) -> Int16 | UInt16:
+    def output_B(self) -> Bit16 | Bit16:
         keys = list(self.registers.keys())
-        return self.registers[keys[self.addr_B.value]].output
+        return self.registers[keys[self.addr_B.unsigned]].output
 
     def update(self):
         keys = list(self.registers.keys())
-        self.registers[keys[self.addr_C.value]].update()
+        self.registers[keys[self.addr_C.unsigned]].update()
         # o correto seria todos os registradores serem atualizados,
         # e só um ter o write ligado de cada vez, mas é mais facil
         # implementar assim do que usar writes separados e um mux

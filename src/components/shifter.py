@@ -7,29 +7,29 @@ class Shifter():
     """
     def __init__(self):
         self.opcode : Bit2 = Bit2(0)
-        self.input : Int16 | UInt16 = Int16(0)
+        self.input : Bit16 | Bit16 = Bit16(0)
 
     @property
-    def output(self) -> Int16 | UInt16:
-        match(self.opcode.value):
+    def output(self) -> Bit16 | Bit16:
+        match(self.opcode._value):
             case 0b00: # NO SHIFT
-                return Int16(self.input.value)
+                return Bit16(self.input._value)
             
             case 0b01: # RIGHT SHIFT
-                if(type(self.input) is UInt16):
-                    return Int16(self.input.value << 1)
+                if(type(self.input) is Bit16):
+                    return Bit16(self.input._value << 1)
                 
-                elif(type(self.input) is Int16):
+                elif(type(self.input) is Bit16):
                     raise ValueError()
                 
                 else:
                     raise ValueError()
             
             case 0b10:  # LEFT SHIFT
-                if(type(self.input) is UInt16):
-                    return Int16(self.input.value << 1)
+                if(type(self.input) is Bit16):
+                    return Bit16(self.input._value << 1)
                 
-                elif(type(self.input) is Int16):
+                elif(type(self.input) is Bit16):
                     raise ValueError()
                 
                 else:

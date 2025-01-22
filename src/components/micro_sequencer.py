@@ -8,13 +8,13 @@ class MicroSequencer:
 
     @property
     def output(self) -> Bit1:
-        match(self.input_cond.value):            
+        match(self.input_cond._value):            
             case 0b00: # no branch
                 return Bit1(0)
             case 0b01: # branch if NEG
-                return Bit1(self.input_negative_flag.value)
+                return Bit1(self.input_negative_flag._value)
             case 0b10: # branch if ZERO
-                return Bit1(self.input_zero_flag.value)
+                return Bit1(self.input_zero_flag._value)
             case 0b10: # branch
                 return Bit1(1)
             case _:    # IMPOSSIBLE
