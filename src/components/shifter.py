@@ -1,4 +1,4 @@
-from bit_types import *
+from .bit_types import *
 
 class Shifter():
     """

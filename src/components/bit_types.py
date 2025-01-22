@@ -58,11 +58,11 @@ class Bit8:
 
     @property
     def unsigned(self) -> int:
-        return self.unsigned
+        return self._value
     
     @property
     def signed(self) -> int:
-        return uint_to_int(self.unsigned, 8)
+        return uint_to_int(self._value, 8)
         
 class Bit12:
     def __init__(self, value: int):

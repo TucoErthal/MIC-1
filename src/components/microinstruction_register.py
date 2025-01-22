@@ -3,6 +3,31 @@ from .register import *
 
 class MicroinstructionRegister(Register32):
     def __init__(self):
+        """
+        
+        AMUX = ?
+        COND 10 (pulo incondicional)
+        ALU = SOMA
+        SH = no shift
+
+        MBR
+        MAR
+        RD = 0
+        WR = 0
+
+        ENC = 1
+        C = a
+        B = b
+        A = a
+        ADDR = 0
+
+            1   2   2   2   1   1   1   1   1   4       4       4       8
+        0b  0   00  00  00  0   0   0   0   0   0000    0000    0000    00000000
+        
+            1   2   2   2   1   1   1   1   1   4       4       4       8
+        0b  0   10  00  00  0   0   0   0   1   1001    1010    1001    00000001
+                pi  sum n   ?   ?   0   0   en  a       b       a       0
+        """
         super().__init__(Bit32(0))
         self.write = Bit1(1)
     

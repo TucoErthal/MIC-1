@@ -9,7 +9,7 @@ class Register8:
 
     def update(self): # clock
         if(self.readonly == False and self.write.unsigned != 0):
-            self.output = self.input
+            self.output = Bit8(self.input.unsigned)
 
 class Register12:
     def __init__(self, initial_value : Bit12 = Bit12(0), readonly : bool = False):
@@ -20,7 +20,7 @@ class Register12:
 
     def update(self): # clock
         if(self.readonly == False and self.write.unsigned != 0):
-            self.output = self.input
+            self.output = Bit12(self.input.unsigned)
 
 class Register16:
     def __init__(self, initial_value : Bit16 = Bit16(0), readonly : bool = False):
@@ -31,7 +31,7 @@ class Register16:
 
     def update(self): # clock
         if(self.readonly == False and self.write.unsigned != 0):
-            self.output = self.input
+            self.output = Bit16(self.input.unsigned)
 
 class Register32:
     def __init__(self, initial_value : Bit32 = Bit32(0), readonly : bool = False):
@@ -42,4 +42,4 @@ class Register32:
 
     def update(self): # clock
         if(self.readonly == False and self.write.unsigned != 0):
-            self.output = self.input
+            self.output = Bit32(self.input.unsigned)

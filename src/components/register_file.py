@@ -21,13 +21,13 @@ class RegisterFile:
             "sp":           Register16(),                               
             "ir":           Register16(),                               
             "tir":          Register16(),                               
-            "zero":         Register16(Bit16(1), readonly = True),      
+            "zero":         Register16(Bit16(0), readonly = True),      
             "plus_one":     Register16(Bit16(1), readonly = True),      
-            "minus_one":    Register16(Bit16(1), readonly = True),      
+            "minus_one":    Register16(Bit16((1<<16)-1), readonly = True),      
             "amask":        Register16(),                               
             "smask":        Register16(),                               
-            "a":            Register16(),                               
-            "b":            Register16(),                               
+            "a":            Register16(Bit16(9)),                               
+            "b":            Register16(Bit16(2)),                               
             "c":            Register16(),                               
             "d":            Register16(),                               
             "e":            Register16(),                               
@@ -38,6 +38,25 @@ class RegisterFile:
         for register in self.registers.values():
             register.input = self.input
             register.write = Bit1(1) # VEJA EXPLICAÇÃO ABAIXO
+
+    def reset(self):
+        self.registers : dict[str, Register16] = {
+            "pc":           Register16(),                               
+            "sp":           Register16(),                               
+            "ir":           Register16(),                               
+            "tir":          Register16(),                               
+            "zero":         Register16(Bit16(0), readonly = True),      
+            "plus_one":     Register16(Bit16(1), readonly = True),      
+            "minus_one":    Register16(Bit16((1<<16)-1), readonly = True),      
+            "amask":        Register16(),                               
+            "smask":        Register16(),                               
+            "a":            Register16(Bit16(9)),                               
+            "b":            Register16(Bit16(2)),                               
+            "c":            Register16(),                               
+            "d":            Register16(),                               
+            "e":            Register16(),                               
+            "f":            Register16()                                
+        }
     
     @property
     def output_A(self) -> Bit16:
