@@ -5,46 +5,34 @@ class Shifter():
     amux = 0: A latch
     amux = 1: MBR
     """
-    def __init__(self):
-        self.opcode : Bit2 = Bit2(0)
-        self.input : Bit16 = Bit16(0)
+    
+    def opcode(self) -> Bit2:
+        raise ConnectionError("Input unconnected")
+    
+    def input(self) -> Bit16:
+        raise ConnectionError("Input unconnected")
 
-    @property
     def output(self) -> Bit16:
-        match(self.opcode.unsigned):
+        _input = self.input()
+        _opcode = self.opcode()
+        match(_opcode.unsigned):
             case 0b00: # NO SHIFT
-                return Bit16(self.input.unsigned)
+                _output = Bit16(_input.unsigned)
+                print()
+                return _output
             
             case 0b01: # RIGHT SHIFT
-                return Bit16(self.input.unsigned >> 1)
+                _output = Bit16(_input.unsigned >> 1)
+                print()
+                return _output
                         
             case 0b10:  # LEFT SHIFT
-                return Bit16((self.input.unsigned << 1) % (1 << 16))
+                _output = Bit16((_input.unsigned << 1) % (1 << 16))
+                print()
+                return _output
                                 
             case 0b11: # NOT USED
                 raise ArithmeticError("shifter opcode 3 does not exist")
             
             case _:    # IMPOSSIBLE
                 raise ValueError("huh?")
-
-"""
-# TEST
-
-shifter = Shifter()
-shifter.opcode = Bit2(2) # left shift
-
-shifter.input = Bit16(70)
-print(shifter.output.unsigned)
-print(shifter.output.signed)
-# DEVE DAR x em um e -x no outro
-
-shifter.input = Bit16(16384)
-print(shifter.output.unsigned)
-print(shifter.output.signed)
-# DEVE DAR x em um e -x no outro
-
-shifter.input = Bit16(32768)
-print(shifter.output.unsigned)
-print(shifter.output.signed)
-# DEVE DAR 0 nos dois ou erro de range (mais provavel)
- """

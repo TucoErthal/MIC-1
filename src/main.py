@@ -24,12 +24,12 @@ latch_A.input = scratchpad.output_A     #A_BUS: SCRATCHPAD TO LATCH_A
 latch_B.input = scratchpad.output_B     #B_BUS: SCRATCHPAD TO LATCH_B
 
 amux.input_B = latch_A.output           #A_LATCH TO AMUX
-alu.input_B = latch_B.output            #B_LATCH TO ALU
+alu.input_B() = latch_B.output            #B_LATCH TO ALU
 mbr.input = latch_B.output              #B_LATCH TO MBR
 amux.input_A = mbr.output               #MBR TO AMUX
-alu.input_A = amux.output               #AMUX TO ALU
+alu.input_A() = amux.output               #AMUX TO ALU
 sh.input = alu.output                   #ALU TO SHIFTER
-scratchpad.input = sh.output            #SHIFTER TO SCRATCHPAD
+scratchpad.input_data = sh.output            #SHIFTER TO SCRATCHPAD
 
 # ================================ CONTROL UNIT ================================
 
@@ -52,16 +52,16 @@ mmux.input_B = mir.addr
 mmux.select = ms.output
 inc.input = mpc.output
 mpc.input = mmux.output
-cs.mpc = mpc.output
+cs.input = mpc.output
 mir.input = cs.output
 ms.input_cond = mir.cond
 ms.input_negative_flag = alu.negative_flag
 ms.input_zero_flag = alu.zero_flag
 
 # to datapath
-scratchpad.addr_A = mir.bus_A
-scratchpad.addr_B = mir.bus_B
-scratchpad.addr_C = mir.bus_C
+scratchpad.input_addr_A = mir.bus_A
+scratchpad.input_addr_B = mir.bus_B
+scratchpad.input_addr_C = mir.bus_C
 
 amux.select = mir.amux
 alu.opcode = mir.alu

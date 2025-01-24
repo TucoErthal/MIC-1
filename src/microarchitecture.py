@@ -6,13 +6,11 @@ mem = Memory()
 
 scratchpad : RegisterFile = RegisterFile()
 
-latch_A = Register16()
-latch_A.write = Bit1(1)
-latch_B = Register16()
-latch_B.write = Bit1(1)
+latch_A = Latch[Bit16](Bit16(0))
+latch_B = Latch[Bit16](Bit16(0))
 
-mar = Register16() #MAR(12 bits)
-mbr = Register16() #MBR(12 bits)
+mar = Register[Bit16](Bit16(0)) #MAR(12 bits)
+mbr = Register[Bit16](Bit16(0)) #MBR(12 bits)
 amux = Multiplexer16by2() #AMUX
 alu = ArithmeticLogicUnit()
 sh = Shifter() #shifter
@@ -28,15 +26,15 @@ mbr.input = latch_B.output              #B_LATCH TO MBR
 amux.input_A = mbr.output               #MBR TO AMUX
 alu.input_A = amux.output               #AMUX TO ALU
 sh.input = alu.output                   #ALU TO SHIFTER
-scratchpad.input = sh.output            #SHIFTER TO SCRATCHPAD
-
+scratchpad.input_data = sh.output       #SHIFTER TO SCRATCHPAD
+scratchpad.setup()
 # ================================ CONTROL UNIT ================================
 
 #decoder_A = Decoder4to16()
 #decoder_B = Decoder4to16()
 mmux = Multiplexer8by2()
 inc = Incrementer()
-mpc = Register8()
+mpc = Register[Bit8](Bit8(0))
 cs : ControlStore = ControlStore()
 mir = MicroinstructionRegister()
 ms = MicroSequencer()
@@ -51,16 +49,16 @@ mmux.input_B = mir.addr
 mmux.select = ms.output
 inc.input = mpc.output
 mpc.input = mmux.output
-cs.mpc = mpc.output
+cs.input = mpc.output
 mir.input = cs.output
 ms.input_cond = mir.cond
 ms.input_negative_flag = alu.negative_flag
 ms.input_zero_flag = alu.zero_flag
 
 # to datapath
-scratchpad.addr_A = mir.bus_A
-scratchpad.addr_B = mir.bus_B
-scratchpad.addr_C = mir.bus_C
+scratchpad.input_addr_A = mir.bus_A
+scratchpad.input_addr_B = mir.bus_B
+scratchpad.input_addr_C = mir.bus_C
 
 amux.select = mir.amux
 alu.opcode = mir.alu
@@ -68,7 +66,7 @@ sh.opcode = mir.shift
 
 def reset():
     mem.generate_garbage()
-    scratchpad.reset()
+    #scratchpad.reset()
 
     clock.current_cycle = 1
     clock.current_subcycle = 1
@@ -122,3 +120,5 @@ clock = Clock()
 # ++++++++++++++++++++++++++++++++++++++++++++++==
 
 step_cycle()
+print("AAAAAAAAAAAAAAAH")
+print(scratchpad.registers["a"].output())

@@ -1,49 +1,30 @@
 from .bit_types import *
 
-class Register8:
-    def __init__(self, initial_value : Bit8 = Bit8(0), readonly : bool = False):
-        self.input : Bit8 = Bit8(0)
-        self.output : Bit8 = initial_value
-        self.write : Bit1 = Bit1(0)
+class Register[T: Bit]:
+    def __init__(self, initial_value : T, readonly : bool = False):
+        self._value : T = initial_value
         self.readonly = readonly
 
-    def update(self): # clock
-        if(self.readonly == False and self.write.unsigned != 0):
-            self.output = Bit8(self.input.unsigned)
+    def input(self) -> T:
+        raise ConnectionError("Input unconnected")
 
-class Register12:
-    def __init__(self, initial_value : Bit12 = Bit12(0), readonly : bool = False):
-        self.input : Bit12 = Bit12(0)
-        self.output : Bit12 = initial_value
-        self.write : Bit1 = Bit1(0)
-        self.readonly = readonly
+    def write(self) -> Bit1:
+        raise ConnectionError("Input unconnected")
 
-    def update(self): # clock
-        if(self.readonly == False and self.write.unsigned != 0):
-            self.output = Bit12(self.input.unsigned)
-
-class Register16:
-    def __init__(self, initial_value : Bit16 = Bit16(0), readonly : bool = False):
-        self.input : Bit16 = Bit16(0)
-        self._value : Bit16 = initial_value
-        self.write : Bit1 = Bit1(0)
-        self.readonly = readonly
-
-    @property
-    def output(self) -> Bit16:
-        return Bit16(self._value.unsigned)
+    def output(self) -> T:
+        _output = self._value
+        if VERBOSE_DEBUG: print(f"\tregister.output() = {_output.unsigned}")
+        return _output
 
     def update(self): # clock
-        if(self.readonly == False and self.write.unsigned != 0):
-            self._value = Bit16(self.input.unsigned)
+        _input = self.input()
+        _write = self.write()
+        if(self.readonly == False and _write.unsigned != 0):
+            self._value = _input # PODE DAR MERDA AQUI COPIANDO POR REFERENCIA, NAO SEI
 
-class Register32:
-    def __init__(self, initial_value : Bit32 = Bit32(0), readonly : bool = False):
-        self.input : Bit32 = Bit32(0)
-        self.output : Bit32 = initial_value
-        self.write : Bit1 = Bit1(0)
-        self.readonly = readonly
-
-    def update(self): # clock
-        if(self.readonly == False and self.write.unsigned != 0):
-            self.output = Bit32(self.input.unsigned)
+def test():
+    x = Register[Bit16](Bit16(0))
+    x.input = lambda: Bit16(9)
+    x.write = lambda: Bit1(1)
+    x.update()
+    x.output()

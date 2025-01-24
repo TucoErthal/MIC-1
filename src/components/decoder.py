@@ -1,18 +1,18 @@
 from .bit_types import *
 
 class Decoder4to16:
-    def __init__(self):
-        self.input : Bit4 = Bit4(0)
-
-    @property
+    def input(self) -> Bit4:
+        raise ConnectionError("Input unconnected")
+   
     def output(self) -> Bit16:
-        _output = Bit16(1 << (self.input.unsigned))
-        if VERBOSE_DEBUG: print(f"\tdecoder({self.input.unsigned}) = {_output.unsigned}")
+        _input = self.input()
+        _output = Bit16(1 << (_input.unsigned))
+        if VERBOSE_DEBUG: print(f"\tdecoder({_input.unsigned}) = {_output.unsigned}")
         return _output
     
-if TEST_COMPONENTS:
+def test():
     dec = Decoder4to16()
     for i in range(16):
-        dec.input = Bit4(i)
+        dec.input = lambda: Bit4(i)
         print(f"---- {i} ----")
-        print(f"0b{dec.output.unsigned:016b}")
+        print(f"0b{dec.output().unsigned:016b}")
