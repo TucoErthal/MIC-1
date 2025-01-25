@@ -6,6 +6,7 @@ from .incrementer import *
 from .latch import *
 from .memory import *
 from .micro_sequencer import *
+from .microassembler import *
 from .microinstruction_register import *
 from .multiplexer import *
 from .register import *

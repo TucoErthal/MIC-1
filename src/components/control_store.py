@@ -1,28 +1,25 @@
 from .bit_types import *
-from .microinstruction_register import microinstruction
 
 class ControlStore:
     def __init__(self):
-        self.microprogram : list[Bit32] = [
+        self._microprogram : list[Bit32] = []
 
-            microinstruction(),
-            microinstruction(enc=1, c=9, b=5, a=4),                     # load 1 into "a"
-            microinstruction(cond=3, enc=1, c=9, b=5, a=9, addr=2),     # while(true): "a" += 1
-        ]
+    def load_microprogram(self, microprogram : list[Bit32]):
+        self._microprogram = microprogram
 
     def input(self) -> Bit8:
         raise ConnectionError("Input unconnected")
 
     def output(self) -> Bit32:
         _input = self.input()
-        _output = self.microprogram[_input.unsigned]
+        _output = self._microprogram[_input.unsigned]
         if VERBOSE_DEBUG: print(f"\tcs({_input.unsigned}) = {_output.unsigned:08x}\t@ {self}")
         return _output
     
 def test():
     print("TEST 2: control_store")
     cs = ControlStore()
-    cs.microprogram = [Bit32(0xfeedbeef)]
+    cs.load_microprogram([Bit32(0xfeedbeef)])
     cs.input = lambda: Bit8(0)
     cs.output()
 

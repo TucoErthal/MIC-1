@@ -122,6 +122,14 @@ clock = Clock()
 
 # ++++++++++++++++++++++++++++++++++++++++++++++==
 
+serialize("program.mic1", [
+    assemble_microinstruction(),
+    assemble_microinstruction(enc=1, c=9, b=5, a=4),                     # load 1 into "a"
+    assemble_microinstruction(cond=3, enc=1, c=9, b=5, a=9, addr=2),     # while(true): "a" += 1
+])
+
+cs.load_microprogram(deserialize("program.mic1"))
+
 for i in range(10):    
     step_cycle()
     #mir.debug()

@@ -1,7 +1,7 @@
 from .bit_types import *
 from .latch import *
 
-def microinstruction(
+def assemble_microinstruction(
 amux : int = 0, cond : int = 0, alu : int = 0, sh : int = 0,
 mbr : int = 0, mar : int = 0, rd : int = 0, wr : int = 0, enc : int = 0,
 c : int = 0, b : int = 0, a : int = 0, addr : int = 0):
@@ -18,7 +18,7 @@ class MicroinstructionRegister(Latch[Bit32]):
     _mbr : int = 0, _mar : int = 0, _rd : int = 0, _wr : int = 0, _enc : int = 0,
     _c : int = 0, _b : int = 0, _a : int = 0, _addr : int = 0):
         
-        self._value = microinstruction(
+        self._value = assemble_microinstruction(
             amux = _amux, cond = _cond, alu = _alu, sh = _sh,
             mbr = _mbr, mar = _mar, rd = _rd, wr = _wr, enc = _enc,
             c = _c, b = _b, a = _a, addr = _addr
