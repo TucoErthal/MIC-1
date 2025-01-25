@@ -1,4 +1,4 @@
-VERBOSE_DEBUG = True
+VERBOSE_DEBUG = False
 
 def bit_slice(value : int, offset : int, width : int,):
     mask = (1 << width) - 1

@@ -20,10 +20,10 @@ sh = Shifter() #shifter
 latch_A.input = scratchpad.output_A     #A_BUS: SCRATCHPAD TO LATCH_A
 latch_B.input = scratchpad.output_B     #B_BUS: SCRATCHPAD TO LATCH_B
 
-amux.input_B = latch_A.output           #A_LATCH TO AMUX
+amux.input_A = latch_A.output           #A_LATCH TO AMUX
 alu.input_B = latch_B.output            #B_LATCH TO ALU
 mbr.input = latch_B.output              #B_LATCH TO MBR
-amux.input_A = mbr.output               #MBR TO AMUX
+amux.input_B = mbr.output               #MBR TO AMUX
 alu.input_A = amux.output               #AMUX TO ALU
 sh.input = alu.output                   #ALU TO SHIFTER
 scratchpad.input_data = sh.output       #SHIFTER TO SCRATCHPAD
@@ -34,7 +34,7 @@ scratchpad.setup()
 #decoder_B = Decoder4to16()
 mmux = Multiplexer8by2()
 inc = Incrementer()
-mpc = Register[Bit8](Bit8(0))
+mpc = Latch[Bit8](Bit8(0))
 cs : ControlStore = ControlStore()
 mir = MicroinstructionRegister()
 ms = MicroSequencer()
@@ -44,8 +44,8 @@ ms = MicroSequencer()
 #decoder_A.input = mir.bus_A
 #decoder_B.input = mir.bus_B
 # DECODER C
-mmux.input_A = inc.output
-mmux.input_B = mir.addr
+mmux.input_A = mir.addr
+mmux.input_B = inc.output
 mmux.select = ms.output
 inc.input = mpc.output
 mpc.input = mmux.output
@@ -56,13 +56,13 @@ ms.input_negative_flag = alu.negative_flag
 ms.input_zero_flag = alu.zero_flag
 
 # to datapath
-scratchpad.input_addr_A = mir.bus_A
-scratchpad.input_addr_B = mir.bus_B
-scratchpad.input_addr_C = mir.bus_C
+scratchpad.input_addr_A = mir.a
+scratchpad.input_addr_B = mir.b
+scratchpad.input_addr_C = mir.c
 
 amux.select = mir.amux
 alu.opcode = mir.alu
-sh.opcode = mir.shift
+sh.opcode = mir.sh
 
 def reset():
     mem.generate_garbage()
@@ -80,32 +80,35 @@ class Clock:
 
 def subcycle1():
     mir.update()
+    clock.current_cycle += 1
 
 def subcycle2():    
+    latch_A.update()
     latch_B.update()
+    clock.current_cycle += 1
     
 def subcycle3():
-    # MBR MAR
-    pass
+    # MAR update
+    clock.current_cycle += 1
 
-def subcycle4():    
+def subcycle4():
+    mpc.update()    
+    # C DECODER, oficialmente (mas acho que n precisa)
     scratchpad.update()
+    # MBR
+
     clock.current_cycle += 1
 
 def step_subcycle():
     match(clock.current_subcycle):
         case 1:
             subcycle1()
-            clock.current_subcycle += 1
         case 2:
             subcycle2()
-            clock.current_subcycle += 1
         case 3:
             subcycle3()
-            clock.current_subcycle += 1
         case 4:
             subcycle4()
-            clock.current_subcycle = 1
         case _: pass
 
 def step_cycle():
@@ -119,6 +122,7 @@ clock = Clock()
 
 # ++++++++++++++++++++++++++++++++++++++++++++++==
 
-step_cycle()
-print("AAAAAAAAAAAAAAAH")
-print(scratchpad.registers["a"].output())
+for i in range(10):    
+    step_cycle()
+    #mir.debug()
+    print(scratchpad.registers["a"].output().unsigned)

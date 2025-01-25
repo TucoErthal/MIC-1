@@ -7,9 +7,6 @@ class Latch[T: Bit]:
     def input(self) -> T:
         raise ConnectionError("Input unconnected")
 
-    def write(self) -> Bit1:
-        raise ConnectionError("Input unconnected")
-
     def output(self) -> T:
         _output = self._value
         if VERBOSE_DEBUG: print(f"\tregister.output() = {_output.unsigned}")

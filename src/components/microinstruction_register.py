@@ -1,56 +1,50 @@
 from .bit_types import *
 from .latch import *
 
+def microinstruction(
+amux : int = 0, cond : int = 0, alu : int = 0, sh : int = 0,
+mbr : int = 0, mar : int = 0, rd : int = 0, wr : int = 0, enc : int = 0,
+c : int = 0, b : int = 0, a : int = 0, addr : int = 0):
+
+    return Bit32(
+        (Bit1(amux).unsigned << 31) + (Bit2(cond).unsigned << 29) + (Bit2(alu).unsigned << 27) + (Bit2(sh).unsigned << 25) +
+        (Bit1(mbr).unsigned << 24) + (Bit1(mar).unsigned << 23) + (Bit1(rd).unsigned << 22) + (Bit1(wr).unsigned << 21) + (Bit1(enc).unsigned << 20) + 
+        (Bit4(c).unsigned << 16) + (Bit4(b).unsigned << 12) + (Bit4(a).unsigned << 8) + (Bit8(addr).unsigned)
+    )
+
 class MicroinstructionRegister(Latch[Bit32]):
-    def __init__(self):
-        """
+    def __init__(self,
+    _amux : int = 0, _cond : int = 0, _alu : int = 0, _sh : int = 0,
+    _mbr : int = 0, _mar : int = 0, _rd : int = 0, _wr : int = 0, _enc : int = 0,
+    _c : int = 0, _b : int = 0, _a : int = 0, _addr : int = 0):
         
-        AMUX = ?
-        COND 10 (pulo incondicional)
-        ALU = SOMA
-        SH = no shift
-
-        MBR
-        MAR
-        RD = 0
-        WR = 0
-
-        ENC = 1
-        C = a
-        B = b
-        A = a
-        ADDR = 0
-
-            1   2   2   2   1   1   1   1   1   4       4       4       8
-        0b  0   00  00  00  0   0   0   0   0   0000    0000    0000    00000000
-        
-            1   2   2   2   1   1   1   1   1   4       4       4       8
-        0b  0   10  00  00  0   0   0   0   1   1001    1010    1001    00000001
-                pi  sum n   ?   ?   0   0   en  a       b       a       0
-        """
-        super().__init__(Bit32(0))
+        self._value = microinstruction(
+            amux = _amux, cond = _cond, alu = _alu, sh = _sh,
+            mbr = _mbr, mar = _mar, rd = _rd, wr = _wr, enc = _enc,
+            c = _c, b = _b, a = _a, addr = _addr
+        )
         
     def addr(self)-> Bit8:
         _input = self.input()
         _output = Bit8(bit_slice(_input.unsigned, 0, 8))
         return _output
     
-    def bus_A(self) -> Bit4:
+    def a(self) -> Bit4:
         _input = self.input()
         _output = Bit4(bit_slice(_input.unsigned, 8, 4))
         return _output
     
-    def bus_B(self) -> Bit4:
+    def b(self) -> Bit4:
         _input = self.input()
         _output = Bit4(bit_slice(_input.unsigned, 12, 4))
         return _output
     
-    def bus_C(self) -> Bit4:
+    def c(self) -> Bit4:
         _input = self.input()
         _output = Bit4(bit_slice(_input.unsigned, 16, 4))
         return _output
     
-    def encode_C(self) -> Bit1:
+    def enc(self) -> Bit1:
         _input = self.input()
         _output = Bit1(bit_slice(_input.unsigned, 20, 1))
         return _output
@@ -75,7 +69,7 @@ class MicroinstructionRegister(Latch[Bit32]):
         _output = Bit1(bit_slice(_input.unsigned, 24, 1))
         return _output
     
-    def shift(self)-> Bit2:
+    def sh(self)-> Bit2:
         _input = self.input()
         _output = Bit2(bit_slice(_input.unsigned, 25, 2))
         return _output
@@ -105,25 +99,50 @@ class MicroinstructionRegister(Latch[Bit32]):
         _output = Bit1(bit_slice(_input.unsigned, 31, 1))
         return _output
     
-    """ def debug(self):
+    def debug(self):
         print("=====================")
-        print(f"\nBYTE 0 = {bit_slice(self.input.unsigned, 0, 8):08b}")
+        print(f"\nBYTE 0 = {bit_slice(self.input().unsigned, 24, 8):08b}")
         print(f"\t(1) amux: {self.amux().unsigned}")
         print(f"\t(2) cond: {self.cond().unsigned}")
         print(f"\t(2) alu: {self.alu().unsigned}")
-        print(f"\t(2) shift: {self.shift().unsigned}")
+        print(f"\t(2) shift: {self.sh().unsigned}")
         print(f"\t(1) mbr: {self.mbr().unsigned}")
 
-        print(f"\nBYTE 1 = {bit_slice(self.input.unsigned, 9, 8):08b}")
+        print(f"\nBYTE 1 = {bit_slice(self.input().unsigned, 16, 8):08b}")
         print(f"\t(1) mar: {self.mar().unsigned}")
         print(f"\t(1) rd: {self.rd().unsigned}")
         print(f"\t(1) wr: {self.wr().unsigned}")
-        print(f"\t(1) encode_C: {self.encode_C().unsigned}")
-        print(f"\t(4) bus_C: {self.bus_C().unsigned}")
+        print(f"\t(1) encode_C: {self.enc().unsigned}")
+        print(f"\t(4) bus_C: {self.c().unsigned}")
 
-        print(f"\nBYTE 2 = {bit_slice(self.input.unsigned, 15, 8):08b}")
-        print(f"\t(4) bus_B: {self.bus_B().unsigned}")
-        print(f"\t(4) bus_A: {self.bus_A().unsigned}")
+        print(f"\nBYTE 2 = {bit_slice(self.input().unsigned, 8, 8):08b}")
+        print(f"\t(4) bus_B: {self.b().unsigned}")
+        print(f"\t(4) bus_A: {self.a().unsigned}")
 
-        print(f"\nBYTE 3 = {bit_slice(self.input.unsigned, 25, 8):08b}")
-        print(f"\t(8) addr: {self.addr().unsigned}") """
+        print(f"\nBYTE 3 = {bit_slice(self.input().unsigned, 0, 8):08b}")
+        print(f"\t(8) addr: {self.addr().unsigned}")
+ 
+    """
+    AMUX = ?
+    COND 10 (pulo incondicional)
+    ALU = SOMA
+    SH = no shift
+
+    MBR
+    MAR
+    RD = 0
+    WR = 0
+
+    ENC = 1
+    C = a
+    B = b
+    A = a
+    ADDR = 0
+
+        1   2   2   2   1   1   1   1   1   4       4       4       8
+    0b  0   00  00  00  0   0   0   0   0   0000    0000    0000    00000000
+    
+        1   2   2   2   1   1   1   1   1   4       4       4       8
+    0b  0   10  00  00  0   0   0   0   1   1001    1010    1001    00000001
+            pi  sum n   ?   ?   0   0   en  a       b       a       0
+    """

@@ -11,7 +11,8 @@ class Multiplexer16by2:
         raise ConnectionError("Input unconnected")
 
     def output(self) -> Bit16:
-        match(self.select().unsigned):
+        _select = self.select()
+        match(_select.unsigned):
             case 0:
                 return self.input_A()
             
@@ -31,8 +32,9 @@ class Multiplexer8by2:
     def select(self) -> Bit1:
         raise ConnectionError("Input unconnected")
 
-    def output(self) -> Bit8:
-        match(self.select().unsigned):
+    def output(self) -> Bit8:        
+        _select = self.select()
+        match(_select.unsigned):
             case 0:
                 return self.input_A()
             
