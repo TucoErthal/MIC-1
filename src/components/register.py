@@ -20,7 +20,7 @@ class Register[T: Bit]:
         _input = self.input()
         _write = self.write()
         if(self.readonly == False and _write.unsigned != 0):
-            self._value = _input # PODE DAR MERDA AQUI COPIANDO POR REFERENCIA, NAO SEI
+            self._value = _input.copy()
 
 def test():
     x = Register[Bit16](Bit16(0))

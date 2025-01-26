@@ -23,6 +23,9 @@ class Bit:
         self._width = width
         self._value = value
 
+    def copy(self):
+        return self.__class__(self._value)
+
     @property
     def unsigned(self) -> int:
         return self._value

@@ -13,4 +13,5 @@ class Latch[T: Bit]:
         return _output
 
     def update(self): # clock
-        self._value = self.input() # PODE DAR MERDA AQUI COPIANDO POR REFERENCIA, NAO SEI
+        _input = self.input()
+        self._value = _input.copy()
