@@ -15,3 +15,6 @@ class Latch[T: Bit]:
     def update(self): # clock
         _input = self.input()
         self._value = _input.copy()
+
+    def flush(self):
+        self._value = self._value.__class__(0)

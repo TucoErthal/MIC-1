@@ -22,6 +22,10 @@ class Register[T: Bit]:
         if(self.readonly == False and _write.unsigned != 0):
             self._value = _input.copy()
 
+    def flush(self):
+        if not(self.readonly):
+            self._value = self._value.__class__(0)
+
 def test():
     x = Register[Bit16](Bit16(0))
     x.input = lambda: Bit16(9)

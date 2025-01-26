@@ -66,8 +66,9 @@ sh.opcode = mir.sh
 
 def reset():
     mem.generate_garbage()
-    #scratchpad.reset()
-
+    scratchpad.reset()
+    mpc.flush()
+    
     clock.current_cycle = 0
     clock.current_subcycle = 0
 

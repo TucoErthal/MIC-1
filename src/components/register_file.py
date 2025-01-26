@@ -22,8 +22,7 @@ class RegisterFile:
         A — selects A bus source: 0 = PC, 1 = AC, etc.
         """
 
-        self.write : Bit1 = Bit1(0)
-
+        self.write : Bit1 = Bit1(1)
         self.registers : dict[str, Register[Bit16]] = {
             "pc":           Register[Bit16](Bit16(0)),                               
             "sp":           Register[Bit16](Bit16(0)),                               
@@ -47,6 +46,9 @@ class RegisterFile:
             register.input = self.input_data
             register.write = lambda: Bit1(1) # VEJA EXPLICAÇÃO ABAIXO
 
+    def reset(self):
+        for register in self.registers.values():
+            register.flush()
     
     def output_A(self) -> Bit16:
         _keys = list(self.registers.keys())
