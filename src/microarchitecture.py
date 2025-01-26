@@ -68,8 +68,8 @@ def reset():
     mem.generate_garbage()
     #scratchpad.reset()
 
-    clock.current_cycle = 1
-    clock.current_subcycle = 1
+    clock.current_cycle = 0
+    clock.current_subcycle = 0
 
 # ================================ CLOCK ================================
 
@@ -97,6 +97,7 @@ def subcycle4():
     scratchpad.update()
     # MBR
     clock.current_subcycle = 4
+    clock.current_cycle += 1
 
 clock = Clock()
 

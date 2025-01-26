@@ -62,7 +62,7 @@ def step_cycle():
     subcycle2()
     subcycle3()
     subcycle4()
-    clock.current_cycle += 1
+    
 def step_subcycle_gui():
     step_subcycle()
     update_scratchpad_table()
