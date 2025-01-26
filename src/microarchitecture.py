@@ -75,48 +75,28 @@ def reset():
 
 class Clock:
     def __init__(self):
-        self.current_cycle = 1
-        self.current_subcycle = 1
+        self.current_cycle = 0
+        self.current_subcycle = 0
 
 def subcycle1():
     mir.update()
-    clock.current_cycle += 1
+    clock.current_subcycle = 1
 
 def subcycle2():    
     latch_A.update()
     latch_B.update()
-    clock.current_cycle += 1
+    clock.current_subcycle = 2
     
 def subcycle3():
     # MAR update
-    clock.current_cycle += 1
+    clock.current_subcycle = 3
 
 def subcycle4():
     mpc.update()    
     # C DECODER, oficialmente (mas acho que n precisa)
     scratchpad.update()
     # MBR
-
-    clock.current_cycle += 1
-
-def step_subcycle():
-    match(clock.current_subcycle):
-        case 1:
-            subcycle1()
-        case 2:
-            subcycle2()
-        case 3:
-            subcycle3()
-        case 4:
-            subcycle4()
-        case _: pass
-
-def step_cycle():
-    subcycle1()
-    subcycle2()
-    subcycle3()
-    subcycle4()
-    clock.current_cycle += 1
+    clock.current_subcycle = 4
 
 clock = Clock()
 

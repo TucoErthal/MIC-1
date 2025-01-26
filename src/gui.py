@@ -41,6 +41,28 @@ def update_mir_table():
 
 # ====================== USER INTERFACE ======================
 
+def step_subcycle():
+    match(clock.current_subcycle):
+        case 0 | 4:
+            subcycle1()
+            step_cycle_button.disable()
+        case 1:
+            subcycle2()
+            step_cycle_button.disable()
+        case 2:
+            subcycle3()
+            step_cycle_button.disable()
+        case 3:
+            subcycle4()
+            step_cycle_button.enable()
+        case _: pass
+
+def step_cycle():
+    subcycle1()
+    subcycle2()
+    subcycle3()
+    subcycle4()
+    clock.current_cycle += 1
 def step_subcycle_gui():
     step_subcycle()
     update_scratchpad_table()
@@ -60,14 +82,14 @@ def reset_gui():
 
 with ui.column(align_items="center").classes('w-full'):
     with ui.row():
-        ui.label().classes("h-128").bind_text_from(clock, "current_cycle")
+        ui.label().style('font-size: 200%; font-weight: 512').bind_text_from(clock, "current_cycle").props('outline round')
         ui.toggle({1: '1', 2: '2', 3: '3', 4: '4'}).bind_value_from(clock, "current_subcycle")
 
     with ui.button_group():
-        with ui.button(icon = "play_arrow", on_click = step_subcycle_gui).classes('bg-grey'):
+        with ui.button(icon = "play_arrow", on_click = step_subcycle_gui) as step_subcycle_button:
             ui.tooltip("Step subcycle")
 
-        with ui.button(icon = "skip_next", on_click = step_cycle_gui).classes('bg-grey'):
+        with ui.button(icon = "skip_next", on_click = step_cycle_gui) as step_cycle_button:
             ui.tooltip("Step cycle")
 
         with ui.button(icon = "power_settings_new", on_click = reset_gui).classes('bg-red'):
@@ -139,12 +161,5 @@ with ui.row():
                 }
             ]
         )
-        ui.button("+20, update", on_click=update_mir_table)
-        """ with ui.column().classes('w-full'):
-            def modify_microprogram():
-                cs.microprogram = [Bit32(int(microinstruction)) for microinstruction in editor.value]
-                print(cs.microprogram)
-            editor = ui.codemirror(value = "type here", language="C", theme="basicDark", on_change = modify_microprogram).classes('w-full')
-             """
 
 ui.run(port=8080)
