@@ -1,4 +1,4 @@
-from nicegui import ui
+from nicegui import ui, events
 from microarchitecture import *
 
 def update_memory_table():
@@ -82,18 +82,20 @@ def reset_gui():
 
 with ui.column(align_items="center").classes('w-full'):
     with ui.row():
-        ui.label().style('font-size: 200%; font-weight: 512').bind_text_from(clock, "current_cycle").props('outline round')
+        with ui.button(color="grey"):                
+            ui.label().style('font-weight: 512').bind_text_from(clock, "current_cycle")
+            
         ui.toggle({1: '1', 2: '2', 3: '3', 4: '4'}).bind_value_from(clock, "current_subcycle")
 
-    with ui.button_group():
-        with ui.button(icon = "play_arrow", on_click = step_subcycle_gui) as step_subcycle_button:
-            ui.tooltip("Step subcycle")
+        with ui.button_group():
+            with ui.button(icon = "play_arrow", on_click = step_subcycle_gui) as step_subcycle_button:
+                ui.tooltip("Step subcycle")
 
-        with ui.button(icon = "skip_next", on_click = step_cycle_gui) as step_cycle_button:
-            ui.tooltip("Step cycle")
+            with ui.button(icon = "skip_next", on_click = step_cycle_gui) as step_cycle_button:
+                ui.tooltip("Step cycle")
 
-        with ui.button(icon = "power_settings_new", on_click = reset_gui).classes('bg-red'):
-            ui.tooltip("Reset").classes('bg-red')
+            with ui.button(icon = "power_settings_new", on_click = reset_gui).classes('bg-red'):
+                ui.tooltip("Reset").classes('bg-red')
 
 with ui.row():
     base_address = 0xf00
@@ -161,5 +163,19 @@ with ui.row():
                 }
             ]
         )
+        
+        microprogram_preview = ui.markdown("")
+
+        def handle_upload(e: events.UploadEventArguments):
+            microprogram = deserialize(e.content)
+            content = ""
+            for microinstruction in microprogram:
+                content += f"{microinstruction.unsigned:032b}\n\n"
+            microprogram_preview.set_content(content)
+            microprogram_preview.update()
+            cs.load_microprogram(microprogram)
+            reset()
+
+        ui.upload(on_upload=handle_upload).props('accept=.mic1').classes('max-w-full')
 
 ui.run(port=8080)
