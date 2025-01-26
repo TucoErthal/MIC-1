@@ -213,12 +213,11 @@ serialize("programs/program.mic1", [
 serialize("programs/fibonacci.mic1", [
     assemble_microinstruction(),
 
+    assemble_microinstruction(enc=1, c=9, a=5, alu=2),
     assemble_microinstruction(enc=1, c=10, a=5, alu=2),
-    assemble_microinstruction(enc=1, c=11, a=5, alu=2),
 
-    assemble_microinstruction(enc=1, c=9, a=11, b=10),
-    assemble_microinstruction(enc=1, c=11, a=9, b=11),
-    assemble_microinstruction(enc=1, c=10, a=11, b=9, cond=3, addr=3),
+    assemble_microinstruction(enc=1, c=9, a=10, b=9),
+    assemble_microinstruction(enc=1, c=10, a=9, b=10, cond=3, addr=3),
 ])
 
 cs.load_microprogram(deserialize("programs/fibonacci.mic1"))
@@ -230,6 +229,3 @@ for i in range(10):
     print(scratchpad.registers["a"].output().unsigned)
     step_cycle()  
     print(scratchpad.registers["b"].output().unsigned)
-    step_cycle()  
-    print(scratchpad.registers["c"].output().unsigned)
-    print("CYCLE END")
