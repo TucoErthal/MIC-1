@@ -222,10 +222,10 @@ serialize("programs/fibonacci.mic1", [
 
 cs.load_microprogram(deserialize("programs/fibonacci.mic1"))
 
-step_cycle()  
+""" step_cycle()  
 step_cycle()  
 for i in range(10):  
     step_cycle()  
     print(scratchpad.registers["a"].output().unsigned)
     step_cycle()  
-    print(scratchpad.registers["b"].output().unsigned)
+    print(scratchpad.registers["b"].output().unsigned) """
