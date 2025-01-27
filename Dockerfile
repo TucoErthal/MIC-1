@@ -1,4 +1,8 @@
-FROM python:3.11
-ADD main.py .
+FROM python:3.12.6
+
+ADD assets /assets
+ADD programs /programs
+ADD src /src
+
 RUN pip install nicegui
-CMD ["python", "./main.py"]
+CMD ["python", "src/gui.py"]

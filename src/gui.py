@@ -1,5 +1,6 @@
 from nicegui import ui, events
 from microarchitecture import *
+import time
 
 def update_memory_table():
     memory_table.update_rows(
@@ -57,10 +58,11 @@ def step_subcycle():
         case _: pass
 
 def step_cycle():
-    subcycle1()
-    subcycle2()
-    subcycle3()
-    subcycle4()
+    _delay = 0.1
+    step_subcycle_gui()
+    ui.timer(_delay, step_subcycle_gui, once=True)
+    ui.timer(2 * _delay, step_subcycle_gui, once=True)
+    ui.timer(3 * _delay, step_subcycle_gui, once=True)
     
 def step_subcycle_gui():
     step_subcycle()
@@ -106,8 +108,6 @@ with ui.row():
         row_key="address"
     )
         
-    """ scratchpad.registers["pc"].output = Bit16(1<<15)
-    scratchpad.registers["sp"].output = Bit16((1<<16)-1) """
     scratchpad_table = ui.table(
         columns = [
             {'name': 'register', 'label': 'Register', 'field': 'register', 'align': 'left', 'sortable': False},
@@ -123,7 +123,7 @@ with ui.row():
         ]
     )
 
-    with ui.column():
+    with ui.column().classes('min-w-[33vw]'):
         mir_table = ui.table(
             title = "MIR",
             column_defaults = {
@@ -162,7 +162,7 @@ with ui.row():
                     'name': "addr", 'addr': mir.addr().unsigned
                 }
             ]
-        )
+        ).classes('w-full')
         
         microprogram_preview = ui.markdown("")
 
@@ -176,6 +176,14 @@ with ui.row():
             cs.load_microprogram(microprogram)
             reset_gui()
 
-        ui.upload(on_upload=handle_upload).props('accept=.mic1').classes('max-w-full')
+        ui.upload(on_upload=handle_upload).props('accept=.mic1')
+
+    with ui.card().classes('w-[20vw]'):
+        ui.image('assets/subcycle0.png').bind_visibility_from(clock, "current_subcycle", value = 0)
+        ui.image('assets/subcycle1.png').bind_visibility_from(clock, "current_subcycle", value = 1)
+        ui.image('assets/subcycle2.png').bind_visibility_from(clock, "current_subcycle", value = 2)
+        ui.image('assets/subcycle3.png').bind_visibility_from(clock, "current_subcycle", value = 3)
+        ui.image('assets/subcycle4.png').bind_visibility_from(clock, "current_subcycle", value = 4)
+
 
 ui.run(port=8080)
