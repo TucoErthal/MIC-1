@@ -17,7 +17,6 @@ def update_scratchpad_table():
                 } for name, register in scratchpad.registers.items()
             ]
         )
-        ui.notify(scratchpad.registers["a"].output().unsigned)
 def update_mir_table():
         mir_table.update_rows(
             [
@@ -76,6 +75,7 @@ def step_cycle_gui():
 
 def reset_gui():
     reset()
+    step_cycle_button.enable()
     update_memory_table()
     update_scratchpad_table()
     update_mir_table()
@@ -174,7 +174,7 @@ with ui.row():
             microprogram_preview.set_content(content)
             microprogram_preview.update()
             cs.load_microprogram(microprogram)
-            reset()
+            reset_gui()
 
         ui.upload(on_upload=handle_upload).props('accept=.mic1').classes('max-w-full')
 
