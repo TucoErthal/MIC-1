@@ -9,7 +9,7 @@ scratchpad : RegisterFile = RegisterFile()
 latch_A = Latch[Bit16](Bit16(0))
 latch_B = Latch[Bit16](Bit16(0))
 
-mar = Register[Bit16](Bit16(0)) #MAR(12 bits)
+mar = Register[Bit12](Bit12(0)) #MAR(12 bits)
 mbr = Register[Bit16](Bit16(0)) #MBR(12 bits)
 amux = Multiplexer16by2() #AMUX
 alu = ArithmeticLogicUnit()
@@ -63,6 +63,15 @@ scratchpad.input_addr_C = mir.c
 amux.select = mir.amux
 alu.opcode = mir.alu
 sh.opcode = mir.sh
+
+# CPU TO MEMORY UNIT
+mem.input_addr = mar.output
+mem.input_data = mbr.output
+mem.input_rd = mir.rd
+mem.input_wr = mir.wr
+
+# MEMORY TO CPU
+mem.output_data
 
 def reset():
     mem.generate_garbage()
