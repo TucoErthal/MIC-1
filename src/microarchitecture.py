@@ -104,7 +104,7 @@ clock = Clock()
 
 # ++++++++++++++++++++++++++++++++++++++++++++++==
 
-cs.load_microprogram(deserialize_file("programs/counter.mic1"))
+cs.load_microprogram(deserialize_file("microprograms/counter.mic1"))
 
 """ step_cycle()  
 step_cycle()  

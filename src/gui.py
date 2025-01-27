@@ -1,6 +1,5 @@
 from nicegui import ui, events
 from microarchitecture import *
-import time
 
 def update_memory_table():
     memory_table.update_rows(
